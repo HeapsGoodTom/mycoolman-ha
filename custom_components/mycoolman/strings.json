@@ -59,5 +59,20 @@
     "button": {
       "show_pin": { "name": "Show pairing code" }
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Setpoint range",
+        "description": "Set the minimum and maximum temperature your fridge supports.",
+        "data": {
+          "min_temp": "Minimum temperature (°C)",
+          "max_temp": "Maximum temperature (°C)"
+        }
+      }
+    },
+    "error": {
+      "min_max_invalid": "Maximum temperature must be greater than the minimum."
+    }
   }
 }

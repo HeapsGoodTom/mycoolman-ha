@@ -10,7 +10,12 @@ from homeassistant.components.bluetooth import (
     BluetoothServiceInfoBleak,
     async_discovered_service_info,
 )
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    ConfigFlowResult,
+    OptionsFlow,
+)
 from homeassistant.const import CONF_ADDRESS
 
 from .const import (
@@ -28,6 +33,12 @@ class MyCoolmanConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for myCOOLMAN."""
 
     VERSION = 1
+
+    @staticmethod
+    def async_get_options_flow(
+        config_entry: ConfigEntry,
+    ) -> MyCoolmanOptionsFlow:
+        return MyCoolmanOptionsFlow()
 
     def __init__(self) -> None:
         self._discovered_address: str | None = None
@@ -132,6 +143,35 @@ class MyCoolmanConfigFlow(ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_MAX_TEMP, default=DEFAULT_MAX_TEMP): vol.Coerce(
                         int
                     ),
+                }
+            ),
+            errors=errors,
+        )
+
+
+class MyCoolmanOptionsFlow(OptionsFlow):
+    """Let the user adjust the setpoint range after setup."""
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            min_temp = user_input[CONF_MIN_TEMP]
+            max_temp = user_input[CONF_MAX_TEMP]
+            if min_temp >= max_temp:
+                errors["base"] = "min_max_invalid"
+            else:
+                return self.async_create_entry(data=user_input)
+
+        current_min = self.config_entry.options.get(CONF_MIN_TEMP, DEFAULT_MIN_TEMP)
+        current_max = self.config_entry.options.get(CONF_MAX_TEMP, DEFAULT_MAX_TEMP)
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_MIN_TEMP, default=current_min): vol.Coerce(int),
+                    vol.Required(CONF_MAX_TEMP, default=current_max): vol.Coerce(int),
                 }
             ),
             errors=errors,
