@@ -1,0 +1,34 @@
+send_command:
+  name: Send raw command
+  description: >-
+    Diagnostic tool. Sends a raw command frame (AA CMD ARG P3 P4 CRC CRC 55)
+    to the fridge using the configured PIN and CRC. Useful for probing
+    undocumented opcodes such as LED, buzzer, or auto-dim settings.
+  fields:
+    command:
+      name: Command opcode
+      description: Command byte (0-255). Known opcodes include 2=power, 3=setpoint, 5=turbo, 7=battery protection.
+      required: true
+      example: 4
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: box
+    argument:
+      name: Argument
+      description: Argument byte (0-255), meaning depends on the opcode.
+      required: true
+      example: 0
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: box
+    address:
+      name: Device address
+      description: Bluetooth MAC of the fridge. Optional if only one is configured.
+      required: false
+      example: "AA:BB:CC:DD:EE:FF"
+      selector:
+        text:
