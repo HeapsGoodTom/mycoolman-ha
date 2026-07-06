@@ -1,3 +1,5 @@
+<img src="logo.png" alt="myCOOLMAN" width="240" align="right" />
+
 # myCOOLMAN for Home Assistant
 
 Control and monitor a **myCOOLMAN** portable fridge/freezer (single-zone models

@@ -12,7 +12,6 @@ import asyncio
 import logging
 from datetime import timedelta
 
-from bleak.backends.device import BLEDevice
 from bleak.exc import BleakError
 from bleak_retry_connector import (
     BleakClientWithServiceCache,

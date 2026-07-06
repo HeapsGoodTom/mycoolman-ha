@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import (
+    CONNECTION_BLUETOOTH,
+    DeviceInfo,
+    format_mac,
+)
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
@@ -19,7 +23,7 @@ class MyCoolmanEntity(CoordinatorEntity[MyCoolmanCoordinator]):
         self._attr_unique_id = f"{coordinator.address}_{key}"
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.address)},
-            connections={("bluetooth", coordinator.address)},
+            connections={(CONNECTION_BLUETOOTH, format_mac(coordinator.address))},
             manufacturer="myCOOLMAN",
             name="myCOOLMAN Fridge",
         )

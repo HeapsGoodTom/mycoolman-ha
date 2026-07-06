@@ -28,6 +28,9 @@ class MyCoolmanSetpoint(MyCoolmanEntity, NumberEntity):
     _attr_native_max_value = MAX_TEMP
     _attr_native_step = 1
     _attr_mode = NumberMode.BOX
+    # The climate entity now provides the primary setpoint control; keep this
+    # for automations but hidden by default to avoid duplication.
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "setpoint_control")
