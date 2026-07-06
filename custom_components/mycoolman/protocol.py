@@ -18,6 +18,8 @@ CMD_POWER = 0x02  # arg 0x01 on / 0x00 off
 CMD_SET_TEMP = 0x03  # arg = target temperature as signed int8
 CMD_TURBO = 0x05  # arg 0x01 on / 0x00 off
 CMD_BATTERY = 0x07  # arg 0x00 low / 0x01 medium / 0x02 high
+CMD_UNIT = 0x08  # arg 0x00 Celsius / 0x01 Fahrenheit (fridge display only)
+CMD_SHOW_PIN = 0x09  # arg 0x00 - show the pairing code on the fridge display
 
 BATTERY_LEVELS = ["Low", "Medium", "High"]
 _BATTERY_BY_INDEX = {0: "Low", 1: "Medium", 2: "High"}

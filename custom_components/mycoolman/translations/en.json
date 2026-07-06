@@ -44,7 +44,11 @@
       "setpoint": { "name": "Setpoint" }
     },
     "select": {
-      "battery_protection": { "name": "Battery protection" }
+      "battery_protection": { "name": "Battery protection" },
+      "display_unit": { "name": "Display unit" }
+    },
+    "button": {
+      "show_pin": { "name": "Show pairing code" }
     }
   }
 }

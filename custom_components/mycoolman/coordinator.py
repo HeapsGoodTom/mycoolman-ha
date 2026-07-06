@@ -122,6 +122,12 @@ class MyCoolmanCoordinator(DataUpdateCoordinator[dict]):
         idx = protocol.BATTERY_LEVELS.index(level)
         await self.async_send(protocol.CMD_BATTERY, idx)
 
+    async def async_set_unit(self, celsius: bool) -> None:
+        await self.async_send(protocol.CMD_UNIT, 0x00 if celsius else 0x01)
+
+    async def async_show_pin(self) -> None:
+        await self.async_send(protocol.CMD_SHOW_PIN, 0x00)
+
     async def async_shutdown(self) -> None:
         if self._client is not None and self._client.is_connected:
             try:
