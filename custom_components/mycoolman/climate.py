@@ -20,7 +20,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import MyCoolmanConfigEntry
-from .const import MAX_TEMP, MIN_TEMP
 from .entity import MyCoolmanEntity
 
 
@@ -44,11 +43,17 @@ class MyCoolmanClimate(MyCoolmanEntity, ClimateEntity):
         | ClimateEntityFeature.TURN_OFF
     )
     _attr_target_temperature_step = 1
-    _attr_min_temp = MIN_TEMP
-    _attr_max_temp = MAX_TEMP
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "climate")
+
+    @property
+    def min_temp(self) -> float:
+        return self.coordinator.min_temp
+
+    @property
+    def max_temp(self) -> float:
+        return self.coordinator.max_temp
 
     @property
     def current_temperature(self) -> float | None:

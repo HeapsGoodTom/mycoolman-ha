@@ -8,7 +8,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from . import MyCoolmanConfigEntry
-from .const import MAX_TEMP, MIN_TEMP
 from .entity import MyCoolmanEntity
 
 
@@ -24,8 +23,6 @@ class MyCoolmanSetpoint(MyCoolmanEntity, NumberEntity):
     _attr_translation_key = "setpoint"
     _attr_device_class = NumberDeviceClass.TEMPERATURE
     _attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
-    _attr_native_min_value = MIN_TEMP
-    _attr_native_max_value = MAX_TEMP
     _attr_native_step = 1
     _attr_mode = NumberMode.BOX
     # The climate entity now provides the primary setpoint control; keep this
@@ -34,6 +31,14 @@ class MyCoolmanSetpoint(MyCoolmanEntity, NumberEntity):
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "setpoint_control")
+
+    @property
+    def native_min_value(self) -> float:
+        return self.coordinator.min_temp
+
+    @property
+    def native_max_value(self) -> float:
+        return self.coordinator.max_temp
 
     @property
     def native_value(self) -> float | None:

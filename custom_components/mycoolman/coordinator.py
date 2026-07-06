@@ -24,7 +24,14 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from . import protocol
-from .const import DOMAIN, UPDATE_INTERVAL_SECONDS
+from .const import (
+    CONF_MAX_TEMP,
+    CONF_MIN_TEMP,
+    DEFAULT_MAX_TEMP,
+    DEFAULT_MIN_TEMP,
+    DOMAIN,
+    UPDATE_INTERVAL_SECONDS,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,6 +54,16 @@ class MyCoolmanCoordinator(DataUpdateCoordinator[dict]):
         self._client: BleakClientWithServiceCache | None = None
         self._lock = asyncio.Lock()
         self._notified = asyncio.Event()
+
+    @property
+    def min_temp(self) -> int:
+        """Minimum settable temperature, from entry options or the default."""
+        return self._entry.options.get(CONF_MIN_TEMP, DEFAULT_MIN_TEMP)
+
+    @property
+    def max_temp(self) -> int:
+        """Maximum settable temperature, from entry options or the default."""
+        return self._entry.options.get(CONF_MAX_TEMP, DEFAULT_MAX_TEMP)
 
     # -- connection management ------------------------------------------------
 
