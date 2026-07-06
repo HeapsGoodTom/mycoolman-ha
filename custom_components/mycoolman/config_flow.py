@@ -13,7 +13,14 @@ from homeassistant.components.bluetooth import (
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_ADDRESS
 
-from .const import CONF_PIN, DOMAIN
+from .const import (
+    CONF_MAX_TEMP,
+    CONF_MIN_TEMP,
+    CONF_PIN,
+    DEFAULT_MAX_TEMP,
+    DEFAULT_MIN_TEMP,
+    DOMAIN,
+)
 from .protocol import SERVICE_UUID, pin_to_bytes
 
 
@@ -25,6 +32,7 @@ class MyCoolmanConfigFlow(ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._discovered_address: str | None = None
         self._discovered_name: str | None = None
+        self._pin: str | None = None
         # address -> label, for the manual picker
         self._discovered: dict[str, str] = {}
 
@@ -73,7 +81,7 @@ class MyCoolmanConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_pin(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Collect the 3-digit PIN and finish."""
+        """Collect the 3-digit PIN, then move on to the setpoint range."""
         errors: dict[str, str] = {}
         if user_input is not None:
             try:
@@ -81,17 +89,50 @@ class MyCoolmanConfigFlow(ConfigFlow, domain=DOMAIN):
             except ValueError:
                 errors["base"] = "invalid_pin"
             else:
-                return self.async_create_entry(
-                    title=self._discovered_name or "myCOOLMAN Fridge",
-                    data={
-                        CONF_ADDRESS: self._discovered_address,
-                        CONF_PIN: user_input[CONF_PIN].strip(),
-                    },
-                )
+                self._pin = user_input[CONF_PIN].strip()
+                return await self.async_step_range()
 
         return self.async_show_form(
             step_id="pin",
             data_schema=vol.Schema({vol.Required(CONF_PIN): str}),
             errors=errors,
             description_placeholders={"address": self._discovered_address or ""},
+        )
+
+    async def async_step_range(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Collect the fridge's setpoint range and create the entry."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            min_temp = user_input[CONF_MIN_TEMP]
+            max_temp = user_input[CONF_MAX_TEMP]
+            if min_temp >= max_temp:
+                errors["base"] = "min_max_invalid"
+            else:
+                return self.async_create_entry(
+                    title=self._discovered_name or "myCOOLMAN Fridge",
+                    data={
+                        CONF_ADDRESS: self._discovered_address,
+                        CONF_PIN: self._pin,
+                    },
+                    options={
+                        CONF_MIN_TEMP: min_temp,
+                        CONF_MAX_TEMP: max_temp,
+                    },
+                )
+
+        return self.async_show_form(
+            step_id="range",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(CONF_MIN_TEMP, default=DEFAULT_MIN_TEMP): vol.Coerce(
+                        int
+                    ),
+                    vol.Required(CONF_MAX_TEMP, default=DEFAULT_MAX_TEMP): vol.Coerce(
+                        int
+                    ),
+                }
+            ),
+            errors=errors,
         )
