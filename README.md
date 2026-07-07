@@ -65,3 +65,19 @@ by a constant factor, adjust the divisor in `protocol.py` (`parse_status`).
 ## Disclaimer
 
 Unofficial, not affiliated with or endorsed by myCOOLMAN. Use at your own risk.
+
+This integration was built with the assistance of Claude (Anthropic's AI
+coding assistant) — the author is an enthusiast, not a professional
+programmer. Review the code yourself before relying on it, especially around
+Bluetooth connection handling.
+
+The BLE protocol was learned by observing and analyzing the behavior of the
+*myCOOLMAN Recreation* Android app (github.com/luoxs/Mycoolman) as a
+reference; no source code from that project is included here. That project's
+repository does not clearly state a license, so if you plan to reuse protocol
+details beyond what's documented in this README, verify your own rights to do
+so independently.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
