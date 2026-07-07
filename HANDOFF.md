@@ -147,7 +147,8 @@ AA  CMD  ARG  P3  P4  CRC_HI  CRC_LO  55
 | 14 | `gc` | 0 = PIN rejected |
 | 15 | heat setpoint | unused |
 | 16 | timer | unused |
-| 17–18 | `code1` / `code2` | **unknown** — possibly the PIN echoed back (test this) |
+| 17 | `code1` | bits 0-1 = LED mode index (0=High White/1=Low White/2=Orange); bit 2 = buzzer off; bit 3 = auto-dim off. Confirmed by live probing. |
+| 18 | `code2` | **unknown** — confirmed flat/uninformative across every capture so far |
 | 19–21 | CRC hi, CRC lo, `0x55` | |
 
 Temperatures decode as `value - 256 if value > 128 else value` (signed int8, °C).
@@ -161,10 +162,10 @@ The fridge always transmits Celsius; the unit setting only affects its own scree
   off/cool. Temperature unit fixed to Celsius (data integrity).
 - **sensor** — temperature, setpoint (read-back), input voltage, error code.
 - **binary_sensor** — turbo, pairing OK.
-- **switch** — power, turbo, buzzer (write-only), auto-dim (write-only).
+- **switch** — power, turbo, buzzer, auto-dim.
 - **number** — setpoint (disabled by default; the climate entity supersedes it).
 - **select** — battery protection; display unit (°C/°F); LED mode (High
-  White/Low White/Orange, write-only).
+  White/Low White/Orange).
 - **options flow** — adjust the fridge's setpoint range (min/max °C) after
   setup, via **Configure** on the integration's device card.
 - **button** — show pairing code on the fridge display.
@@ -308,9 +309,12 @@ your HA instance.
    real MCMR43: `0x0C` = LED (`select`: High White/Low White/Orange), `0x0D` =
    buzzer (`switch`), `0x0E` = auto-dim (`switch`). `0x0A`/`0x0B` remain dead
    (tried, no observed effect). Implemented.
-4. Once LED/buzzer/dim state is known, check whether any unknown status byte
-   (`status` @10, or `code1`/`code2`) changes when you toggle them, to enable
-   read-back instead of optimistic entities.
+4. ~~Once LED/buzzer/dim state is known, check whether any unknown status
+   byte changes when you toggle them.~~ — **Confirmed and implemented.**
+   `code1` (byte 17) is a bitmask: bits 0-1 = LED mode index, bit 2 = buzzer
+   off, bit 3 = auto-dim off (10 live captures, zero exceptions; every other
+   byte in the frame stayed flat). LED/buzzer/auto-dim are now real read-back
+   entities, not optimistic — `protocol.parse_status` decodes them directly.
 
 **Polish:**
 
