@@ -1,10 +1,13 @@
 <img src="logo.png" alt="myCOOLMAN" width="240" align="right" />
 
-# myCOOLMAN for Home Assistant
+# myCOOLMAN MCMR Fridge/Freezer for Home Assistant
 
-Control and monitor a **myCOOLMAN** portable fridge/freezer (single-zone models
-such as the CTP/CTG 43) over Bluetooth LE from Home Assistant — using your
-existing **ESPHome Bluetooth Proxy**, no dedicated ESP required.
+Control and monitor a **myCOOLMAN MCMR** portable fridge/freezer over
+Bluetooth LE from Home Assistant — using your existing **ESPHome Bluetooth
+Proxy**, no dedicated ESP needed. Confirmed working on the single-zone
+**MCMR43**; the single-zone **MCMR60** should also work via the same protocol
+(untested). Dual-zone models — **MCMR38DZ**, **MCMR55DZ**, **MCMR78DZ** — are
+untested and expose extra freezer fields this integration does not yet use.
 
 The protocol was reverse-engineered from the *myCOOLMAN Recreation* Android app
 ([github.com/luoxs/Mycoolman](https://github.com/luoxs/Mycoolman)). No cloud, no

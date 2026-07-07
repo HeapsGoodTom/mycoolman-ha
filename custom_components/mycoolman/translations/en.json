@@ -18,7 +18,7 @@
       },
       "range": {
         "title": "Setpoint range",
-        "description": "Set the minimum and maximum temperature your fridge supports. Defaults are confirmed for the single-zone myCOOLMAN 43; adjust if yours differs.",
+        "description": "Set the minimum and maximum temperature your fridge supports. Defaults are confirmed for the single-zone myCOOLMAN 43 (MCMR43); adjust if yours differs.",
         "data": {
           "min_temp": "Minimum temperature (°C)",
           "max_temp": "Maximum temperature (°C)"

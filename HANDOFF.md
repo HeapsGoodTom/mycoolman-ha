@@ -23,9 +23,11 @@ An **unofficial Home Assistant custom integration** that monitors and controls a
 - The protocol was reverse-engineered from the *myCOOLMAN Recreation* Android app
   (`https://github.com/luoxs/Mycoolman`), then extended by live probing.
 
-**Target device during development:** a single-zone myCOOLMAN 43. The protocol is
-believed common across single-zone models (37/43/etc.); dual-zone ("DZ") models
-expose extra freezer fields this integration does not yet use.
+**Target device during development:** a single-zone **MCMR43**. The single-zone
+**MCMR60** should also work via the same protocol (untested). Dual-zone models
+(**MCMR38DZ**, **MCMR55DZ**, **MCMR78DZ**) expose extra freezer fields this
+integration does not yet use, and protocol compatibility is unconfirmed —
+needs testing.
 
 ### Architecture at a glance
 
