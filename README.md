@@ -2,7 +2,7 @@
 
 # myCOOLMAN MCMR Fridge/Freezer for Home Assistant
 
-[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/heapsgoodtom)
+<a href="https://www.buymeacoffee.com/heapsgoodtom"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="40" /></a>
 
 Control and monitor a **myCOOLMAN MCMR** portable fridge/freezer over
 Bluetooth LE from Home Assistant — using your existing **ESPHome Bluetooth
