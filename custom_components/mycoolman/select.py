@@ -22,6 +22,7 @@ async def async_setup_entry(
         [
             MyCoolmanBatterySelect(coordinator),
             MyCoolmanUnitSelect(coordinator),
+            MyCoolmanLedSelect(coordinator),
         ]
     )
 
@@ -60,3 +61,21 @@ class MyCoolmanUnitSelect(MyCoolmanEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         await self.coordinator.async_set_unit(option == "Celsius")
+
+
+class MyCoolmanLedSelect(MyCoolmanEntity, SelectEntity):
+    """LED display color/mode. Write-only - the fridge never reports it back."""
+
+    _attr_translation_key = "led"
+    _attr_entity_category = EntityCategory.CONFIG
+    _attr_options = ["High White", "Low White", "Orange"]
+
+    def __init__(self, coordinator) -> None:
+        super().__init__(coordinator, "led")
+
+    @property
+    def current_option(self) -> str | None:
+        return self.coordinator.led
+
+    async def async_select_option(self, option: str) -> None:
+        await self.coordinator.async_set_led(option)

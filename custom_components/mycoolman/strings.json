@@ -47,14 +47,17 @@
     },
     "switch": {
       "power": { "name": "Power" },
-      "turbo": { "name": "Turbo" }
+      "turbo": { "name": "Turbo" },
+      "buzzer": { "name": "Buzzer" },
+      "auto_dim": { "name": "Auto-dim" }
     },
     "number": {
       "setpoint": { "name": "Setpoint" }
     },
     "select": {
       "battery_protection": { "name": "Battery protection" },
-      "display_unit": { "name": "Display unit" }
+      "display_unit": { "name": "Display unit" },
+      "led": { "name": "LED" }
     },
     "button": {
       "show_pin": { "name": "Show pairing code" }

@@ -120,8 +120,10 @@ AA  CMD  ARG  P3  P4  CRC_HI  CRC_LO  55
 | `0x07` | Battery protection | `0x00` Low / `0x01` Medium / `0x02` High | confirmed |
 | `0x08` | Display unit | `0x00` °C / `0x01` °F (fridge display only) | confirmed by probing |
 | `0x09` | Show pairing code on display | `0x00` | confirmed by probing |
-| `0x04`, `0x06` | — | tried args 0/1/2, no observed effect | dead? |
-| LED / buzzer / auto-dim | see §6 | unknown | **not found yet** |
+| `0x0C` | LED | `0x00` High White / `0x01` Low White / `0x02` Orange | confirmed by probing |
+| `0x0D` | Buzzer | `0x00` on / `0x01` off | confirmed by probing |
+| `0x0E` | Auto-dim (fridge display) | `0x00` on / `0x01` off | confirmed by probing |
+| `0x04`, `0x06`, `0x0A`, `0x0B` | — | tried args 0/1/2, no observed effect | dead? |
 
 ### Status frame (fridge → app), 22 bytes
 
@@ -157,9 +159,10 @@ The fridge always transmits Celsius; the unit setting only affects its own scree
   off/cool. Temperature unit fixed to Celsius (data integrity).
 - **sensor** — temperature, setpoint (read-back), input voltage, error code.
 - **binary_sensor** — turbo, pairing OK.
-- **switch** — power, turbo.
+- **switch** — power, turbo, buzzer (write-only), auto-dim (write-only).
 - **number** — setpoint (disabled by default; the climate entity supersedes it).
-- **select** — battery protection; display unit (°C/°F).
+- **select** — battery protection; display unit (°C/°F); LED mode (High
+  White/Low White/Orange, write-only).
 - **options flow** — adjust the fridge's setpoint range (min/max °C) after
   setup, via **Configure** on the integration's device card.
 - **button** — show pairing code on the fridge display.
@@ -298,19 +301,10 @@ your HA instance.
 
 **Needs data capture:**
 
-3. **LED, buzzer, auto-dim opcodes.** These exist in the *official* app but not in
-   the recreation source, so their opcodes are unknown. Probing `0x04`/`0x06`
-   (args 0/1/2) showed no effect. Next steps:
-   - Probe upward: `0x0A`, `0x0B`, `0x0C`, `0x0D` via the diagnostic service.
-   - Try **1-based args** (manual labels are B1/B2/B3, H0/H1, A0/A1), i.e. LED may
-     want arg `1/2/3`; an opcode may silently ignore an out-of-range arg and look
-     dead when it was actually correct.
-   - Definitive route: **Bluetooth HCI snoop log**. Enable it in Android Developer
-     Options, change each setting in the official app, pull
-     `FS/data/misc/bluetooth/logs/btsnoop_hci.log` from `adb bugreport`, and read
-     the `fee1` write values (frames `AA … 55`) in Wireshark.
-   - Target values to implement once known: LED = High White / Low White / Orange
-     (→ `select`); buzzer = on/off (→ `switch`); auto-dim = on/off (→ `switch`).
+3. ~~LED, buzzer, auto-dim opcodes.~~ — **Confirmed by live probing** against a
+   real MCMR43: `0x0C` = LED (`select`: High White/Low White/Orange), `0x0D` =
+   buzzer (`switch`), `0x0E` = auto-dim (`switch`). `0x0A`/`0x0B` remain dead
+   (tried, no observed effect). Implemented.
 4. Once LED/buzzer/dim state is known, check whether any unknown status byte
    (`status` @10, or `code1`/`code2`) changes when you toggle them, to enable
    read-back instead of optimistic entities.

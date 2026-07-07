@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from homeassistant.components.switch import SwitchEntity
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -22,6 +23,8 @@ async def async_setup_entry(
         [
             MyCoolmanSwitch(coordinator, "power", "power"),
             MyCoolmanSwitch(coordinator, "turbo", "turbo"),
+            MyCoolmanBuzzerSwitch(coordinator),
+            MyCoolmanAutoDimSwitch(coordinator),
         ]
     )
 
@@ -47,3 +50,45 @@ class MyCoolmanSwitch(MyCoolmanEntity, SwitchEntity):
             await self.coordinator.async_set_power(on)
         else:
             await self.coordinator.async_set_turbo(on)
+
+
+class MyCoolmanBuzzerSwitch(MyCoolmanEntity, SwitchEntity):
+    """Buzzer on/off. Write-only - the fridge never reports it back."""
+
+    _attr_translation_key = "buzzer"
+    _attr_entity_category = EntityCategory.CONFIG
+    _attr_assumed_state = True
+
+    def __init__(self, coordinator) -> None:
+        super().__init__(coordinator, "buzzer")
+
+    @property
+    def is_on(self) -> bool | None:
+        return self.coordinator.buzzer_on
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self.coordinator.async_set_buzzer(True)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self.coordinator.async_set_buzzer(False)
+
+
+class MyCoolmanAutoDimSwitch(MyCoolmanEntity, SwitchEntity):
+    """Display auto-dim on/off. Write-only - the fridge never reports it back."""
+
+    _attr_translation_key = "auto_dim"
+    _attr_entity_category = EntityCategory.CONFIG
+    _attr_assumed_state = True
+
+    def __init__(self, coordinator) -> None:
+        super().__init__(coordinator, "auto_dim")
+
+    @property
+    def is_on(self) -> bool | None:
+        return self.coordinator.auto_dim_on
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self.coordinator.async_set_auto_dim(True)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self.coordinator.async_set_auto_dim(False)
