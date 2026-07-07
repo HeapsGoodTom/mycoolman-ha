@@ -1,0 +1,13 @@
+{
+  "entity": {
+    "sensor": {
+      "error": { "default": "mdi:alert-outline" }
+    },
+    "binary_sensor": {
+      "turbo": { "default": "mdi:alpha-t-box-outline" }
+    },
+    "switch": {
+      "turbo": { "default": "mdi:alpha-t-box-outline" }
+    }
+  }
+}
