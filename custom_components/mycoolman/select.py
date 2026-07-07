@@ -64,19 +64,18 @@ class MyCoolmanUnitSelect(MyCoolmanEntity, SelectEntity):
 
 
 class MyCoolmanLedSelect(MyCoolmanEntity, SelectEntity):
-    """LED display color/mode. Write-only - the fridge never reports it back."""
+    """LED display color/mode, decoded from the status frame's code1 byte."""
 
     _attr_translation_key = "led"
     _attr_entity_category = EntityCategory.CONFIG
     _attr_options = ["High White", "Low White", "Orange"]
-    _attr_assumed_state = True
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "led")
 
     @property
     def current_option(self) -> str | None:
-        return self.coordinator.led
+        return (self.coordinator.data or {}).get("led")
 
     async def async_select_option(self, option: str) -> None:
         await self.coordinator.async_set_led(option)

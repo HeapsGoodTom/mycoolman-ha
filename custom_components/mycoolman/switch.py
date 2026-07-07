@@ -53,18 +53,17 @@ class MyCoolmanSwitch(MyCoolmanEntity, SwitchEntity):
 
 
 class MyCoolmanBuzzerSwitch(MyCoolmanEntity, SwitchEntity):
-    """Buzzer on/off. Write-only - the fridge never reports it back."""
+    """Buzzer on/off, decoded from the status frame's code1 byte."""
 
     _attr_translation_key = "buzzer"
     _attr_entity_category = EntityCategory.CONFIG
-    _attr_assumed_state = True
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "buzzer")
 
     @property
     def is_on(self) -> bool | None:
-        return self.coordinator.buzzer_on
+        return (self.coordinator.data or {}).get("buzzer_on")
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         await self.coordinator.async_set_buzzer(True)
@@ -74,18 +73,17 @@ class MyCoolmanBuzzerSwitch(MyCoolmanEntity, SwitchEntity):
 
 
 class MyCoolmanAutoDimSwitch(MyCoolmanEntity, SwitchEntity):
-    """Display auto-dim on/off. Write-only - the fridge never reports it back."""
+    """Display auto-dim on/off, decoded from the status frame's code1 byte."""
 
     _attr_translation_key = "auto_dim"
     _attr_entity_category = EntityCategory.CONFIG
-    _attr_assumed_state = True
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "auto_dim")
 
     @property
     def is_on(self) -> bool | None:
-        return self.coordinator.auto_dim_on
+        return (self.coordinator.data or {}).get("auto_dim_on")
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         await self.coordinator.async_set_auto_dim(True)
