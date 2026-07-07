@@ -2,6 +2,8 @@
 
 # myCOOLMAN MCMR Fridge/Freezer for Home Assistant
 
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/heapsgoodtom)
+
 Control and monitor a **myCOOLMAN MCMR** portable fridge/freezer over
 Bluetooth LE from Home Assistant — using your existing **ESPHome Bluetooth
 Proxy**, no dedicated ESP needed. Confirmed working on the single-zone
@@ -55,6 +57,17 @@ account — everything is local.
 Bytes 12–13 of the status frame are assumed to be voltage in tenths of a volt.
 Compare the "Input voltage" sensor against the fridge's own display; if it's off
 by a constant factor, adjust the divisor in `protocol.py` (`parse_status`).
+
+## Next steps
+
+- **MCMR60 / dual-zone owners** — if you can install this and report back (or
+  open an issue) with what works and what doesn't, that would help a lot; only
+  a single-zone MCMR43 has been tested against so far.
+- **Input voltage scaling** — see [Verifying the voltage scaling](#verifying-the-voltage-scaling)
+  above; a multimeter reading at the DC input barrel plug compared against the
+  sensor would confirm or correct the divisor.
+- **Bugs, feature ideas, or other models** — issues and PRs are welcome on the
+  repo.
 
 ## Notes / limitations
 
