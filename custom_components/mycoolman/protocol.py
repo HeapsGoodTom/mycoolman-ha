@@ -27,6 +27,13 @@ CMD_AUTO_DIM = 0x0E  # arg 0x00 on / 0x01 off
 BATTERY_LEVELS = ["Low", "Medium", "High"]
 _BATTERY_BY_INDEX = {0: "Low", 1: "Medium", 2: "High"}
 
+# code1 (byte 17 of the status frame) bitmask, confirmed by live probing:
+# bits 0-1 = current LED mode index; bit 2 = buzzer is off; bit 3 = auto-dim
+# is off. No other status byte reflects these settings.
+_LED_BY_CODE1_INDEX = {0: "High White", 1: "Low White", 2: "Orange"}
+_BUZZER_OFF_BIT = 0x04
+_AUTO_DIM_OFF_BIT = 0x08
+
 
 def pin_to_bytes(pin: str) -> tuple[int, int]:
     """Split a 3-hex-digit PIN into the two payload bytes (P3, P4)."""
@@ -80,4 +87,7 @@ def parse_status(data: bytes) -> dict | None:
         "paired": data[14] != 0,  # 'gc' byte: 0 == wrong PIN
         "code1": data[17],
         "code2": data[18],
+        "led": _LED_BY_CODE1_INDEX.get(data[17] & 0x03),
+        "buzzer_on": not (data[17] & _BUZZER_OFF_BIT),
+        "auto_dim_on": not (data[17] & _AUTO_DIM_OFF_BIT),
     }
