@@ -285,11 +285,16 @@ your HA instance.
 
 **High-value, unblocked:**
 
-1. **Verify voltage scaling.** Compare the "Input voltage" sensor to the fridge's
-   own display; fix the divisor in `protocol.parse_status` (bytes 12–13).
-2. **Test the `code1`/`code2` = PIN echo theory.** Grab a debug status frame; if
-   bytes 17–18 equal the PIN's `P3`/`P4`, the fridge broadcasts its own PIN —
-   enabling **self-discovering PINs** (drop the manual PIN step in `config_flow`).
+1. **Verify voltage scaling.** The 43 has no on-device display option for input
+   voltage (checked the menu and manual — not present), so the sensor can't be
+   confirmed against the fridge itself. A multimeter reading at the DC input
+   barrel plug, compared against the "Input voltage" sensor, is the only
+   remaining way to confirm/adjust the divisor in `protocol.parse_status`
+   (bytes 12–13). Still open.
+2. ~~Test the `code1`/`code2` = PIN echo theory.~~ — **Refuted.** Captured a debug
+   status frame: `code1=8`, `code2=0`. `P3` happened to match (`8`), but `P4`
+   (`34`) did not — `code1`/`code2` are not the PIN echoed back. Self-discovering
+   PINs is not possible via these bytes; their actual meaning is still unknown.
 
 **Needs data capture:**
 
