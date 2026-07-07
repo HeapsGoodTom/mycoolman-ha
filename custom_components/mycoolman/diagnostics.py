@@ -19,14 +19,24 @@ async def async_get_config_entry_diagnostics(
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
     coordinator = entry.runtime_data
+    if coordinator is None:
+        return {
+            "entry_data": async_redact_data(dict(entry.data), TO_REDACT),
+            "entry_options": dict(entry.options),
+        }
+
+    last_exception_repr = None
+    if coordinator.last_exception:
+        last_exception_repr = repr(coordinator.last_exception).replace(
+            coordinator.address, "**REDACTED**"
+        )
+
     return {
         "entry_data": async_redact_data(dict(entry.data), TO_REDACT),
         "entry_options": dict(entry.options),
         "coordinator": {
             "last_update_success": coordinator.last_update_success,
-            "last_exception": (
-                repr(coordinator.last_exception) if coordinator.last_exception else None
-            ),
+            "last_exception": last_exception_repr,
             "data": coordinator.data,
         },
     }
