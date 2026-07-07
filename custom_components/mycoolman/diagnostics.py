@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from homeassistant.components.diagnostics import async_redact_data
@@ -27,8 +28,11 @@ async def async_get_config_entry_diagnostics(
 
     last_exception_repr = None
     if coordinator.last_exception:
-        last_exception_repr = repr(coordinator.last_exception).replace(
-            coordinator.address, "**REDACTED**"
+        last_exception_repr = re.sub(
+            re.escape(coordinator.address),
+            "**REDACTED**",
+            repr(coordinator.last_exception),
+            flags=re.IGNORECASE,
         )
 
     return {
