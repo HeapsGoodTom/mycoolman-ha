@@ -40,7 +40,9 @@ account — everything is local.
 3. Install **myCOOLMAN**, then restart Home Assistant.
 4. The fridge should be auto-discovered under **Settings → Devices & Services**.
    Otherwise add it manually via **+ Add Integration → myCOOLMAN**.
-5. Enter the 3-digit PIN when prompted.
+5. Enter the 3-digit PIN when prompted, then set the fridge's setpoint range
+   (defaults to −20…20 °C, confirmed for the single-zone 43 — adjust if your
+   model differs).
 
 ## Verifying the voltage scaling
 
@@ -53,8 +55,9 @@ by a constant factor, adjust the divisor in `protocol.py` (`parse_status`).
 - The integration holds a persistent connection (for push updates), so it
   occupies one proxy connection slot continuously.
 - The fridge must stay within range of a proxy/adapter.
-- Setpoint range defaults to −20…20 °C; adjust `MIN_TEMP`/`MAX_TEMP` in
-  `const.py` for your model.
+- Setpoint range defaults to −20…20 °C (confirmed for the single-zone 43). Set
+  it during setup, or change it later via **Settings → Devices & Services →
+  myCOOLMAN → Configure**.
 
 ## Disclaimer
 
