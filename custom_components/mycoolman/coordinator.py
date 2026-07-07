@@ -54,6 +54,12 @@ class MyCoolmanCoordinator(DataUpdateCoordinator[dict]):
         self._client: BleakClientWithServiceCache | None = None
         self._lock = asyncio.Lock()
         self._notified = asyncio.Event()
+        # LED/buzzer/auto-dim are write-only: the fridge never reports these
+        # back, so they're tracked here rather than in `self.data` (which is
+        # replaced wholesale by every real status notification).
+        self._led: str | None = None
+        self._buzzer_on: bool | None = None
+        self._auto_dim_on: bool | None = None
 
     @property
     def min_temp(self) -> int:
@@ -64,6 +70,21 @@ class MyCoolmanCoordinator(DataUpdateCoordinator[dict]):
     def max_temp(self) -> int:
         """Maximum settable temperature, from entry options or the default."""
         return self._entry.options.get(CONF_MAX_TEMP, DEFAULT_MAX_TEMP)
+
+    @property
+    def led(self) -> str | None:
+        """Last-commanded LED mode, or None if never set this session."""
+        return self._led
+
+    @property
+    def buzzer_on(self) -> bool | None:
+        """Last-commanded buzzer state, or None if never set this session."""
+        return self._buzzer_on
+
+    @property
+    def auto_dim_on(self) -> bool | None:
+        """Last-commanded auto-dim state, or None if never set this session."""
+        return self._auto_dim_on
 
     # -- connection management ------------------------------------------------
 
@@ -144,6 +165,19 @@ class MyCoolmanCoordinator(DataUpdateCoordinator[dict]):
 
     async def async_set_unit(self, celsius: bool) -> None:
         await self.async_send(protocol.CMD_UNIT, 0x00 if celsius else 0x01)
+
+    async def async_set_led(self, option: str) -> None:
+        arg = {"High White": 0x00, "Low White": 0x01, "Orange": 0x02}[option]
+        await self.async_send(protocol.CMD_LED, arg)
+        self._led = option
+
+    async def async_set_buzzer(self, on: bool) -> None:
+        await self.async_send(protocol.CMD_BUZZER, 0x00 if on else 0x01)
+        self._buzzer_on = on
+
+    async def async_set_auto_dim(self, on: bool) -> None:
+        await self.async_send(protocol.CMD_AUTO_DIM, 0x00 if on else 0x01)
+        self._auto_dim_on = on
 
     async def async_show_pin(self) -> None:
         await self.async_send(protocol.CMD_SHOW_PIN, 0x00)

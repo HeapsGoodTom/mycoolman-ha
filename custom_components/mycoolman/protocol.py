@@ -20,6 +20,9 @@ CMD_TURBO = 0x05  # arg 0x01 on / 0x00 off
 CMD_BATTERY = 0x07  # arg 0x00 low / 0x01 medium / 0x02 high
 CMD_UNIT = 0x08  # arg 0x00 Celsius / 0x01 Fahrenheit (fridge display only)
 CMD_SHOW_PIN = 0x09  # arg 0x00 - show the pairing code on the fridge display
+CMD_LED = 0x0C  # arg 0x00 High White / 0x01 Low White / 0x02 Orange
+CMD_BUZZER = 0x0D  # arg 0x00 on / 0x01 off
+CMD_AUTO_DIM = 0x0E  # arg 0x00 on / 0x01 off
 
 BATTERY_LEVELS = ["Low", "Medium", "High"]
 _BATTERY_BY_INDEX = {0: "Low", 1: "Medium", 2: "High"}
