@@ -688,14 +688,16 @@ git commit -m "Document the configurable setpoint range"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Deploy to a real Home Assistant instance**
+**Result: user confirmed the setpoint range functionality works on real hardware.**
+
+- [x] **Step 1: Deploy to a real Home Assistant instance**
 
 Follow `HANDOFF.md` §6: copy `custom_components/mycoolman/` to
 `/config/custom_components/mycoolman/` on the test HA instance, then fully
 restart Home Assistant (custom-component code changes require a restart, not
 just a reload).
 
-- [ ] **Step 2: Verify the new config-flow step**
+- [x] **Step 2: Verify the new config-flow step**
 
 Remove any existing myCOOLMAN config entry for the test fridge, then re-add it
 via **Settings → Devices & Services → + Add Integration → myCOOLMAN** (or let
@@ -706,7 +708,7 @@ Bluetooth discovery prompt it). Confirm:
   must be greater than the minimum" error and does not proceed.
 - Submitting `min_temp = -20`, `max_temp = 20` creates the entry successfully.
 
-- [ ] **Step 3: Verify the options flow applies immediately**
+- [x] **Step 3: Verify the options flow applies immediately**
 
 On the newly created entry, go to **Settings → Devices & Services →
 myCOOLMAN → Configure**. Confirm:
@@ -716,7 +718,7 @@ myCOOLMAN → Configure**. Confirm:
   re-enable it to check) setpoint number entity's max bound immediately,
   with no manual reload or HA restart.
 
-- [ ] **Step 4: Verify backward compatibility with pre-existing entries**
+- [x] **Step 4: Verify backward compatibility with pre-existing entries**
 
 If a config entry from before this feature exists (no `min_temp`/`max_temp` in
 its options), confirm its climate card still shows a `-20`…`20` range until
