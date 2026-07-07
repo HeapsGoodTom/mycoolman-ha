@@ -1,4 +1,4 @@
-"""Select platform for myCOOLMAN (battery protection level)."""
+"""Select platform for myCOOLMAN (battery protection, display unit, LED)."""
 
 from __future__ import annotations
 
@@ -69,6 +69,7 @@ class MyCoolmanLedSelect(MyCoolmanEntity, SelectEntity):
     _attr_translation_key = "led"
     _attr_entity_category = EntityCategory.CONFIG
     _attr_options = ["High White", "Low White", "Orange"]
+    _attr_assumed_state = True
 
     def __init__(self, coordinator) -> None:
         super().__init__(coordinator, "led")

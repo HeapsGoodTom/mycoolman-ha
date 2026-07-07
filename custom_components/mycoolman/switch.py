@@ -1,4 +1,4 @@
-"""Switch platform for myCOOLMAN (power, turbo)."""
+"""Switch platform for myCOOLMAN (power, turbo, buzzer, auto-dim)."""
 
 from __future__ import annotations
 

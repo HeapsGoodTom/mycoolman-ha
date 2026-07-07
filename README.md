@@ -25,6 +25,9 @@ account — everything is local.
 | Turbo | switch / binary_sensor | Turbo mode |
 | Battery protection | select | Low / Medium / High |
 | Pairing OK | binary_sensor | Reflects the fridge's PIN-valid flag |
+| LED | select | High White / Low White / Orange (write-only) |
+| Buzzer | switch | Write-only |
+| Auto-dim | switch | Display auto-dim, write-only |
 
 ## Requirements
 
@@ -40,11 +43,11 @@ account — everything is local.
 
 1. HACS → three-dot menu → **Custom repositories**.
 2. Add this repository's URL, category **Integration**.
-3. Install **myCOOLMAN**, then restart Home Assistant.
+3. Install **myCOOLMAN MCMR Fridge/Freezer**, then restart Home Assistant.
 4. The fridge should be auto-discovered under **Settings → Devices & Services**.
-   Otherwise add it manually via **+ Add Integration → myCOOLMAN**.
+   Otherwise add it manually via **+ Add Integration → myCOOLMAN MCMR Fridge/Freezer**.
 5. Enter the 3-digit PIN when prompted, then set the fridge's setpoint range
-   (defaults to −20…20 °C, confirmed for the single-zone 43 — adjust if your
+   (defaults to −20…20 °C, confirmed for the single-zone MCMR43 — adjust if your
    model differs).
 
 ## Verifying the voltage scaling
@@ -58,9 +61,9 @@ by a constant factor, adjust the divisor in `protocol.py` (`parse_status`).
 - The integration holds a persistent connection (for push updates), so it
   occupies one proxy connection slot continuously.
 - The fridge must stay within range of a proxy/adapter.
-- Setpoint range defaults to −20…20 °C (confirmed for the single-zone 43). Set
+- Setpoint range defaults to −20…20 °C (confirmed for the single-zone MCMR43). Set
   it during setup, or change it later via **Settings → Devices & Services →
-  myCOOLMAN → Configure**.
+  myCOOLMAN MCMR Fridge/Freezer → Configure**.
 
 ## Disclaimer
 
