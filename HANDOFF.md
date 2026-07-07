@@ -141,7 +141,7 @@ AA  CMD  ARG  P3  P4  CRC_HI  CRC_LO  55
 | 7 | heat | unused |
 | 8 | battery protection | 0 Low / 1 Medium / 2 High |
 | 9 | unit | 1 = °C |
-| 10 | status | meaning unknown — candidate for compressor/LED state |
+| 10 | status | meaning unknown — candidate for compressor state |
 | 11 | error code | raw |
 | 12–13 | voltage hi/lo | scaling **unconfirmed** (assumed ÷10 → volts) |
 | 14 | `gc` | 0 = PIN rejected |
