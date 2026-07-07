@@ -275,9 +275,10 @@ your HA instance.
 
 ## 7. Release / HACS workflow
 
-1. Bump `version` in `manifest.json` (semver). The last shipped baseline was
-   `0.1.0`; the display-unit + show-pin + diagnostic-service additions warrant
-   `0.2.0`.
+1. Bump `version` in `manifest.json` (semver). `0.1.0` was the baseline;
+   `0.2.0` added display-unit + show-pin + diagnostic-service, plus the
+   configurable setpoint range; `0.3.0` added the LED/buzzer/auto-dim
+   entities and the myCOOLMAN MCMR Fridge/Freezer rename.
 2. Commit and push. Optionally tag a GitHub release — HACS can track either the
    default branch or releases.
 3. Users update through HACS. `brand/icon.png` shows inside HA on 2026.3+; the
