@@ -101,6 +101,9 @@ class MyCoolmanCoordinator(DataUpdateCoordinator[dict]):
         parsed = protocol.parse_status(bytes(data))
         if parsed is None:
             return
+        _LOGGER.debug(
+            "Status from %s: raw=%s parsed=%s", self.address, bytes(data).hex(), parsed
+        )
         self._notified.set()
         self.async_set_updated_data(parsed)
 
